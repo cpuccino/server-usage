@@ -1,5 +1,23 @@
 import { execSync } from "child_process";
 
+export type CpuLoad = {
+    name: string;
+    usage: number;
+    idle: number;
+}
+
+export type CpuRelease = string;
+
+export type CpuArch = string;
+
+export type DiskUsage = {
+    type: string, size: string, used: string, available: string;
+}
+
+export type MemoryUsage = {
+    total: number, used: number, free: number;
+}
+
 export function getSysInfo() {
     const delimeter = '#!$'
 
@@ -8,8 +26,8 @@ export function getSysInfo() {
     const memoryUsageRaw = execSync(`free -m | awk '/^Mem/ {print $2 "${delimeter}" $3 "${delimeter}" $4}'`).toString();
 
     const cpuInfo = JSON.parse(cpuInfoJson);
-    const { release, machine, statistics } = cpuInfo?.sysstat?.hosts[0];
-    const cpuLoad = statistics[0]['cpu-load'].map((cpu: any) => ({ name: cpu.cpu, usage: cpu.usr, idle: cpu.idle }));
+    const { release, arch, statistics } = cpuInfo?.sysstat?.hosts[0] as { release: CpuRelease, arch: CpuArch, statistics: any };
+    const cpuLoad: CpuLoad[] = statistics[0]['cpu-load'].map((cpu: any) => ({ name: cpu.cpu, usage: cpu.usr, idle: cpu.idle }));
     const diskUsage = diskUsageRaw.split('\n').slice(1, -1).map(entry => {
         const [partition, type, size, used, available] = entry.split(delimeter);
         return { partition, type, size, used, available };
@@ -20,7 +38,7 @@ export function getSysInfo() {
     return {
         cpuLoad,
         release,
-        machine,
+        arch,
         diskUsage,
         memoryUsage
     };
