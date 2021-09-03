@@ -1,3 +1,1 @@
-export {
-    CpuArch, CpuLoad, CpuRelease, DiskUsage, MemoryUsage
-} from './src/services/sysinfo';
+export { SysInfo, CpuLoad, DiskUsage, MemoryUsage } from './src/services/sysinfo';
