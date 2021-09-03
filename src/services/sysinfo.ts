@@ -22,6 +22,7 @@ export type MemoryUsage = {
 
 export type SysInfo = {
   cpuLoad: CpuLoad[];
+  sysname: string,
   release: string;
   arch: string;
   diskUsage: DiskUsage[];
@@ -69,7 +70,7 @@ export function getSysInfo(): SysInfo {
   ).toString();
 
   const cpuInfo = JSON.parse(cpuInfoJson);
-  const { release, arch, statistics } = cpuInfo?.sysstat?.hosts[0];
+  const { release, sysname, machine: arch, statistics } = cpuInfo?.sysstat?.hosts[0];
 
   const cpuLoad = parseCpuLoad(statistics[0]['cpu-load']);
   const diskUsage = parseDiskUsage(diskUsageRaw, delimeter);
@@ -78,6 +79,7 @@ export function getSysInfo(): SysInfo {
   const sysInfo = {
     cpuLoad,
     release,
+    sysname,
     arch,
     diskUsage,
     memoryUsage
