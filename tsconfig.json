@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
+    "target": "esnext",
+    "module": "commonjs",
     "lib": ["dom", "es6", "es2019", "esnext.asynciterable"],
     "allowJs": false,
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": ".build",
     "moduleResolution": "node",
     "preserveConstEnums": true,
     "removeComments": true,
@@ -18,8 +18,7 @@
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "declaration": true
+    "experimentalDecorators": true
   },
   "exclude": ["node_modules", ".vscode"],
   "typeRoots": ["./node_modules/@types/"]
