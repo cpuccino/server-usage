@@ -5,7 +5,7 @@ const DELIMETER = '#!$';
 const CPU_USAGE_INFO_CMD = `mpstat -P ALL -o JSON -u`;
 const DISK_USAGE_INFO_CMD = `df -hT | awk '{print $1 "${DELIMETER}" $2 "${DELIMETER}" $3 "${DELIMETER}" $4 "${DELIMETER}" $5}'`;
 const MEMORY_USAGE_INFO_CMD = `free -m | awk '/^Mem/ {print $2 "${DELIMETER}" $3 "${DELIMETER}" $4}'`;
-const UPTIME_INFO_CMD = `uptime -p | awk -F, '{ sub(".*up", x, $1); print $1 "${DELIMETER}" $2 "${DELIMETER}" $3 }'`
+const UPTIME_INFO_CMD = `uptime -p | awk -F, '{ sub(".*up", x, $1); print $1 "${DELIMETER}" $2 "${DELIMETER}" $3 }'`;
 
 export type CpuLoad = {
   name: string;
@@ -31,11 +31,11 @@ export type Uptime = {
   days: number;
   hours: number;
   minutes: number;
-}
+};
 
 export type SysInfo = {
   cpuLoad: CpuLoad[];
-  sysname: string,
+  sysname: string;
   release: string;
   arch: string;
   diskUsage: DiskUsage[];
@@ -73,8 +73,11 @@ function parseMemoryUsage(memoryUsageRaw: string): MemoryUsage {
 }
 
 function parseUptime(uptimeRaw: string): Uptime {
-  const uptimeFields = uptimeRaw.split(DELIMETER).map(t => t.trim()).filter(t => t);
-  
+  const uptimeFields = uptimeRaw
+    .split(DELIMETER)
+    .map(t => t.trim())
+    .filter(t => t);
+
   const uptime: Uptime = { days: 0, hours: 0, minutes: 0 };
 
   uptimeFields.forEach(field => {
@@ -90,7 +93,7 @@ function parseUptime(uptimeRaw: string): Uptime {
 export function getSysInfo(): SysInfo {
   const cpuInfoJson = execSync(CPU_USAGE_INFO_CMD).toString();
   const diskUsageRaw = execSync(DISK_USAGE_INFO_CMD).toString();
-  const memoryUsageRaw = execSync(MEMORY_USAGE_INFO_CMD ).toString();
+  const memoryUsageRaw = execSync(MEMORY_USAGE_INFO_CMD).toString();
   const uptimeRaw = execSync(UPTIME_INFO_CMD).toString();
 
   const cpuInfo = JSON.parse(cpuInfoJson);
