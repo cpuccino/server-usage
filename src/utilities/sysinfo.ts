@@ -27,6 +27,12 @@ export type MemoryUsage = {
   free: number;
 };
 
+export type Uptime = {
+  days: number;
+  hours: number;
+  minutes: number;
+}
+
 export type SysInfo = {
   cpuLoad: CpuLoad[];
   sysname: string,
@@ -34,13 +40,8 @@ export type SysInfo = {
   arch: string;
   diskUsage: DiskUsage[];
   memoryUsage: MemoryUsage;
+  uptime: Uptime;
 };
-
-export type UptimeInfo = {
-  days: number;
-  hours: number;
-  minutes: number;
-}
 
 function parseCpuLoad(cpuLoadRaw: { cpu: string; usr: number; idle: number }[]): CpuLoad[] {
   return cpuLoadRaw.map(({ cpu, usr, idle }) => ({
@@ -71,10 +72,10 @@ function parseMemoryUsage(memoryUsageRaw: string): MemoryUsage {
   return memoryUsage;
 }
 
-function parseUptime(uptimeRaw: string): UptimeInfo {
+function parseUptime(uptimeRaw: string): Uptime {
   const uptimeFields = uptimeRaw.split(DELIMETER).map(t => t.trim()).filter(t => t);
   
-  const uptime: UptimeInfo = { days: 0, hours: 0, minutes: 0 };
+  const uptime: Uptime = { days: 0, hours: 0, minutes: 0 };
 
   uptimeFields.forEach(field => {
     const [duration, unit] = field.split(/\s+/);

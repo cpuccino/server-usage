@@ -1,1 +1,1 @@
-export { SysInfo, CpuLoad, DiskUsage, MemoryUsage } from './src/utilities/sysinfo';
+export { SysInfo, CpuLoad, DiskUsage, MemoryUsage, Uptime } from './src/utilities/sysinfo';
